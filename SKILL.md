@@ -1,6 +1,6 @@
 ---
 name: web-chat
-description: Use when the user wants to ask Google Gemini or ChatGPT a question, search for information via an AI chatbot, or get a chatbot's opinion on a topic. Triggers on phrases like "ask Gemini", "ask ChatGPT", "ask GPT", "let Gemini answer", "search with ChatGPT", "check with Gemini", "use GPT to look up", "问一下 Gemini", "问一下 ChatGPT", "用 Gemini 查", "用 GPT 查", "让 Gemini 回答", "让 ChatGPT 回答", "用 ChatGPT 搜索". Sends the user's query to the target chatbot via browser automation and returns the response with any citation links.
+description: Use when the user wants to interact with Google Gemini or ChatGPT via browser automation. Triggers on phrases like "ask Gemini", "ask ChatGPT", "ask GPT", "让 Gemini", "让 ChatGPT", "问一下 Gemini", "问一下 ChatGPT", "用 Gemini 查", "用 GPT 查". Sends the user's query to the target chatbot and returns the response verbatim.
 version: 1.0.0
 metadata:
   openclaw:
@@ -63,7 +63,7 @@ The start script launches Chrome with `--remote-debugging-port=9222` and `--user
 | `--new-chat` | Force new chat session | `false` |
 | `--json` | JSON output | `false` |
 
-Parse the script output and present it to the user.
+Return the script output to the user VERBATIM. Do NOT summarize, rephrase, translate, or otherwise alter the response. Present the full, unmodified text exactly as the script printed it.
 
 ## Error Handling
 
