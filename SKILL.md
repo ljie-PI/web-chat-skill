@@ -7,9 +7,10 @@ metadata:
     emoji: "\u2728"
     category: "ai-tools"
     tags: ["gemini", "google", "chatgpt", "openai", "gpt", "browser-automation", "playwright", "ai-chat"]
-    os: [linux, macos]
+    # NOTE: OpenClaw reports the host OS as "darwin" on macOS.
+    os: [linux, darwin]
     requires:
-      bins: ["python3", "google-chrome"]
+      bins: ["python3"]
 ---
 
 # Web Chat
@@ -25,14 +26,13 @@ Send messages to AI chatbots (Gemini, ChatGPT) via Playwright browser automation
 
 ### Step 1: Ensure Chrome is Running with CDP
 
-If the script fails to connect (Chrome not running or no `--remote-debugging-port`), restart Chrome:
+If the script fails to connect (Chrome not running or no `--remote-debugging-port`), start Chrome:
 
 ```bash
-killall -9 chrome 2>/dev/null; sleep 1
 {baseDir}/scripts/start_chrome.sh
 ```
 
-The start script launches Chrome with `--remote-debugging-port=9222` and `--user-data-dir=~/.openclaw/workspace/chrome_profile`. Login sessions persist across restarts. If Chrome is already running without `--remote-debugging-port`, it must be killed first.
+The start script has built-in locking and CDP detection to handle concurrent starts safely. It launches Chrome with `--remote-debugging-port=9222` and `--user-data-dir=~/.openclaw/workspace/chrome_profile`. Login sessions persist across restarts.
 
 ### Step 2: Choose Chatbot and Extract Query
 
@@ -69,7 +69,7 @@ Return the script output to the user VERBATIM. Do NOT summarize, rephrase, trans
 
 | Error | Action |
 |-------|--------|
-| "Cannot connect to Chrome on port 9222" | `killall -9 chrome 2>/dev/null; sleep 1` then `{baseDir}/scripts/start_chrome.sh`, wait, retry |
+| "Cannot connect to Chrome on port 9222" | Run `{baseDir}/scripts/start_chrome.sh` (has built-in lock and CDP check), wait 5 seconds, retry. Do NOT kill Chrome manually. |
 | "You are not logged in" | Inform user to log in manually in the Chrome window |
 | "Could not find input field" | Selectors may be outdated; inform user the script may need updating |
 | Response timeout | Retry with `--timeout 300` |
